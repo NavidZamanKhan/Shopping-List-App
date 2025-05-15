@@ -6,31 +6,25 @@ class GroceryItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children:
-          groceryItems
-              .map(
-                (item) => Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: 24,
-                          width: 24,
-                          color: item.category.color,
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      Text(item.name),
-                      const Spacer(),
-                      Text(item.quantity.toString()),
-                    ],
-                  ),
-                ),
-              )
-              .toList(),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Your Groceries'), centerTitle: false),
+      body: ListView.builder(
+        itemCount: groceryItems.length,
+        itemBuilder: (ctx, index) {
+          return ListTile(
+            leading: Container(
+              width: 24,
+              height: 24,
+              color: groceryItems[index].category.color,
+            ),
+            title: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(groceryItems[index].name),
+            ),
+            trailing: Text(groceryItems[index].quantity.toString()),
+          );
+        },
+      ),
     );
   }
 }
