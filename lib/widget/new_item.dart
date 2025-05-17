@@ -10,6 +10,8 @@ class NewItem extends StatefulWidget {
 }
 
 class _NewItemState extends State<NewItem> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,6 +19,7 @@ class _NewItemState extends State<NewItem> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               TextFormField(
@@ -24,7 +27,7 @@ class _NewItemState extends State<NewItem> {
                 decoration: const InputDecoration(
                   label: Text("Title"),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
                   ),
                   contentPadding: EdgeInsets.all(10),
                   hintText: "Enter a title",
@@ -36,6 +39,44 @@ class _NewItemState extends State<NewItem> {
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        label: Text("Amount"),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                        prefixText: "\$",
+                      ),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter an amount";
+                        }
+                        if (double.tryParse(value) == null) {
+                          return "Please enter a valid number";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  // const SizedBox(width: 16),
+                  // DropdownButtonFormField(
+                  //   items: [
+                  //     DropdownMenuItem(
+                  //       value: "Groceries",
+                  //       child: Text("Groceries"),
+                  //     ),
+                  //   ],
+                  //   onChanged: (value) {},
+                  // ),
+                ],
               ),
             ],
           ),
