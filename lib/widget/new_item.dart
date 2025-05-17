@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NewItem extends StatefulWidget {
@@ -14,15 +13,33 @@ class _NewItemState extends State<NewItem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CupertinoNavigationBar(
-        middle: const Text(
-          "Add a new item",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
+      appBar: AppBar(title: const Text('Add a new item')),
       body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Form(child: Column(children: [TextFormField()])),
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          child: Column(
+            children: [
+              TextFormField(
+                maxLength: 50,
+                decoration: const InputDecoration(
+                  label: Text("Title"),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  contentPadding: EdgeInsets.all(10),
+                  hintText: "Enter a title",
+                  hintStyle: TextStyle(color: Colors.grey),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter a title";
+                  }
+                  return null;
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
