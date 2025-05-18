@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list_app/data/categories.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -66,16 +67,36 @@ class _NewItemState extends State<NewItem> {
                       },
                     ),
                   ),
-                  // const SizedBox(width: 16),
-                  // DropdownButtonFormField(
-                  //   items: [
-                  //     DropdownMenuItem(
-                  //       value: "Groceries",
-                  //       child: Text("Groceries"),
-                  //     ),
-                  //   ],
-                  //   onChanged: (value) {},
-                  // ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        label: const Text("Category"),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                      ),
+                      items: [
+                        for (final category in categories.entries)
+                          DropdownMenuItem(
+                            child: Expanded(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 4,
+                                    height: 4,
+                                    color: category.value.color,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(category.value.title),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                      onChanged: (value) {},
+                    ),
+                  ),
                 ],
               ),
             ],
