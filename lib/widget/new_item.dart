@@ -35,14 +35,18 @@ class _NewItemState extends State<NewItem> {
                   hintStyle: TextStyle(color: Colors.grey),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter a title";
+                  if (value == null ||
+                      value.isEmpty ||
+                      value.trim().length == 1 ||
+                      value.trim().length > 50) {
+                    return "Please enter a valid title";
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Expanded(
                     child: TextFormField(
@@ -57,11 +61,11 @@ class _NewItemState extends State<NewItem> {
                         decimal: true,
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter an amount";
-                        }
-                        if (double.tryParse(value) == null) {
-                          return "Please enter a valid number";
+                        if (value == null ||
+                            value.isEmpty ||
+                            int.tryParse(value) == null ||
+                            int.tryParse(value)! <= 0) {
+                          return "Please enter a valid amount";
                         }
                         return null;
                       },
@@ -79,23 +83,43 @@ class _NewItemState extends State<NewItem> {
                       items: [
                         for (final category in categories.entries)
                           DropdownMenuItem(
-                            child: Expanded(
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 4,
-                                    height: 4,
+                            value: category.key,
+                            child: Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(4),
+                                  ),
+                                  child: Container(
+                                    width: 8,
+                                    height: 8,
                                     color: category.value.color,
                                   ),
-                                  const SizedBox(width: 6),
-                                  Text(category.value.title),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(width: 6),
+                                Text(category.value.title),
+                              ],
                             ),
                           ),
                       ],
                       onChanged: (value) {},
                     ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(onPressed: () {}, child: const Text("Cancel")),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: const Text("Add Item"),
                   ),
                 ],
               ),
