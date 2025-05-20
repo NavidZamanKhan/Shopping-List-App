@@ -13,6 +13,10 @@ class NewItem extends StatefulWidget {
 class _NewItemState extends State<NewItem> {
   final _formKey = GlobalKey<FormState>();
 
+  void _saveItem() {
+    _formKey.currentState!.validate();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,7 +117,7 @@ class _NewItemState extends State<NewItem> {
                 children: [
                   TextButton(onPressed: () {}, child: const Text("Cancel")),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: _saveItem,
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
