@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list_app/data/categories.dart';
+import 'package:shopping_list_app/models/category.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -12,9 +13,15 @@ class NewItem extends StatefulWidget {
 
 class _NewItemState extends State<NewItem> {
   final _formKey = GlobalKey<FormState>();
+  var _title = "";
+  var _enteredAmount = 1;
+  var _selecedCategory = categories[Categories.fruit]!;
 
   void _saveItem() {
-    _formKey.currentState!.validate();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      print(_title);
+    }
   }
 
   @override
@@ -47,7 +54,11 @@ class _NewItemState extends State<NewItem> {
                   }
                   return null;
                 },
+                onSaved: (value) {
+                  _title = value!;
+                },
               ),
+
               const SizedBox(height: 16),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -59,8 +70,10 @@ class _NewItemState extends State<NewItem> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(16)),
                         ),
+
                         prefixText: "\$",
                       ),
+                      initialValue: _enteredAmount.toString(),
                       keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
@@ -72,6 +85,9 @@ class _NewItemState extends State<NewItem> {
                           return "Please enter a valid amount";
                         }
                         return null;
+                      },
+                      onSaved: (value) {
+                        _enteredAmount = int.parse(value!);
                       },
                     ),
                   ),
@@ -87,7 +103,7 @@ class _NewItemState extends State<NewItem> {
                       items: [
                         for (final category in categories.entries)
                           DropdownMenuItem(
-                            value: category.key,
+                            value: _selecedCategory,
                             child: Row(
                               children: [
                                 ClipRRect(
@@ -106,7 +122,11 @@ class _NewItemState extends State<NewItem> {
                             ),
                           ),
                       ],
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          _selecedCategory = value!;
+                        });
+                      },
                     ),
                   ),
                 ],
