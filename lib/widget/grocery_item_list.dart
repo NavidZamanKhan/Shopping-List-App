@@ -12,6 +12,8 @@ class GroceryItemList extends StatefulWidget {
 }
 
 class _GroceryItemListState extends State<GroceryItemList> {
+  final List<GroceryItemList> _groceryItems = [];
+
   void _addItem() {
     Navigator.of(context).push(
       MaterialPageRoute(
