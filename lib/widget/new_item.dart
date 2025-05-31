@@ -26,6 +26,9 @@ class _NewItemState extends State<NewItem> {
   void _saveItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      setState(() {
+        _isSending = true;
+      });
       final url = Uri.https(
         "flutter-prep-546fc-default-rtdb.firebaseio.com",
         "shopping_list.json",
@@ -177,19 +180,29 @@ class _NewItemState extends State<NewItem> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: () {
-                        _formKey.currentState!.reset();
-                      },
+                      onPressed:
+                          _isSending == true
+                              ? null
+                              : () {
+                                _formKey.currentState!.reset();
+                              },
                       child: const Text("Cancel"),
                     ),
                     ElevatedButton(
-                      onPressed: _saveItem,
+                      onPressed: _isSending ? null : _saveItem,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: const Text("Add Item"),
+                      child:
+                          _isSending
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(),
+                              )
+                              : const Text("Add Item"),
                     ),
                   ],
                 ),
