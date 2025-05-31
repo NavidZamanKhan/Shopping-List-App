@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shopping_list_app/data/categories.dart';
+import 'package:shopping_list_app/data/dummy_items.dart';
 import 'package:shopping_list_app/models/category.dart';
+import 'package:shopping_list_app/models/grocery_item.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -19,15 +21,16 @@ class _NewItemState extends State<NewItem> {
   var _title = "";
   var _enteredAmount = 1;
   var _selecedCategory = categories[Categories.fruit]!;
+  var _isSending = false;
 
-  void _saveItem() {
+  void _saveItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final url = Uri.https(
         "flutter-prep-546fc-default-rtdb.firebaseio.com",
         "shopping_list.json",
       );
-      http.post(
+      final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
         body: json.encode({
@@ -35,6 +38,20 @@ class _NewItemState extends State<NewItem> {
           "quantity": _enteredAmount,
           "category": _selecedCategory.title,
         }),
+      );
+
+      final Map<String, dynamic> resData = json.decode(response.body);
+
+      if (!context.mounted) {
+        return;
+      }
+      Navigator.of(context).pop(
+        GroceryItem(
+          id: resData["name"],
+          name: _title,
+          quantity: _enteredAmount,
+          category: _selecedCategory,
+        ),
       );
       // Navigator.of(context).pop(
       //   GroceryItem(
