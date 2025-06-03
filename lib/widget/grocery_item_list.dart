@@ -39,7 +39,7 @@ class _GroceryItemListState extends State<GroceryItemList> {
     }
     if (_error == null) print(response.body);
     final List<GroceryItem> loadedItems = [];
-    final Map<String, dynamic> listData = json.decode(response.body);
+    final Map<String, dynamic> listData = json.decode(response.body) ?? {};
     for (final item in listData.entries) {
       final category =
           categories.entries
@@ -78,6 +78,17 @@ class _GroceryItemListState extends State<GroceryItemList> {
     });
   }
 
+  void _removeItem(GroceryItem item) {
+    final url = Uri.https(
+      "flutter-prep-546fc-default-rtdb.firebaseio.com",
+      "shopping_list/${item.id}.json",
+    );
+    http.delete(url);
+    setState(() {
+      _groceryItems.remove(item);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget content = Center(
@@ -106,9 +117,7 @@ class _GroceryItemListState extends State<GroceryItemList> {
           return Dismissible(
             key: Key(_groceryItems[index].id),
             onDismissed: (direction) {
-              setState(() {
-                _groceryItems.removeAt(index);
-              });
+              _removeItem(_groceryItems[index]);
             },
             child: ListTile(
               leading: Container(
